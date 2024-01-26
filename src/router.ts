@@ -1,11 +1,11 @@
 import { Router } from "express";
+import instructorsRoutes from "./features/Instructor/logic/instructors.routes";
 
-import exampleRoutes from "./features/example/example.routes";
 
 const router: Router = Router();
 
 export default (): Router => {
-  exampleRoutes(router);
+  instructorsRoutes(router);
 
   return router;
 };

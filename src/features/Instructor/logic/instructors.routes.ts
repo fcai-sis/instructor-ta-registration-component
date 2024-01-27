@@ -23,6 +23,10 @@ export default (router: Router) => {
 
     asyncHandler(createInstructorHandler)
   );
+  
+  /*
+   * Delete Instructor
+   **/
 
   router.delete(
     "/delete/:instructorId",
@@ -55,6 +59,18 @@ export default (router: Router) => {
 
     // Validate request body
     updateInstructorValidator,
+
+    asyncHandler(updateInstructorHandler)
+  );
+
+  /*
+    * Find instructor by id
+    **/
+  router.get(
+    "/find/:instructorId",
+
+    // Ensure instructor id in params
+    ensureInstructorIdInParamsMiddleware,
 
     asyncHandler(updateInstructorHandler)
   );

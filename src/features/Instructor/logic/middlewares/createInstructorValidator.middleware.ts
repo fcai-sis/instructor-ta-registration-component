@@ -2,7 +2,7 @@ import * as validator from "express-validator";
 import { NextFunction, Request, Response } from "express";
 
 import logger from "../../../../core/logger";
-import { departments } from "features/Instructor/data/models/Instructor.model";
+import { departments } from "../../data/models/Instructor.model";
 
 /**
  * Validates the request body of the create Instructor endpoint.

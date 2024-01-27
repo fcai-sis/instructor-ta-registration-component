@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { body, validationResult } from "express-validator";
 
 import logger from "../../../../core/logger";
-import { departments } from "features/Instructor/data/models/Instructor.model";
+import { departments } from "../../data/models/Instructor.model";
 
 const updateInstructorValidator = [
   body("fullName").optional().isString().withMessage("fullName must be a string"),

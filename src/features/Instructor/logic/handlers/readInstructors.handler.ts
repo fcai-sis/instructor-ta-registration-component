@@ -2,22 +2,16 @@ import { Request, Response } from "express";
 import InstructorModel from "../../data/models/Instructor.model";
 
 
-type HandlerRequest = Request<
-  {},
-  {},
-  {
-    page: number;
-    pageSize: number;
-  }
->;
+type HandlerRequest = Request;
+
 
 /*
  * Reads all Instructors
  * */
 const handler = async (req: HandlerRequest, res: Response) => {
   // get the pagination parameters
-  const page = Number(req.body.page) || 1;
-  const pageSize = Number(req.body.pageSize) || 10;
+  const page = req.context.page;
+  const pageSize = req.context.pageSize;
 
   // read the instructors from the db
   const instructors = await InstructorModel.find()

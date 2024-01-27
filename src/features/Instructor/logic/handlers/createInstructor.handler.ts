@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 
-import InstructorModel, {DepartmentTypes} from "../../data/models/Instructor.model";
+import InstructorModel, { DepartmentTypes } from "../../data/models/Instructor.model";
+import { MongooseError } from "mongoose";
 
 type HandlerRequest = Request<
   {},
@@ -17,7 +18,11 @@ type HandlerRequest = Request<
  * */
 const handler = async (req: HandlerRequest, res: Response) => {
   const { fullName, email, department } = req.body;
+  const existingInstructor = await InstructorModel.findOne({ email });
 
+  if (existingInstructor) {
+    return res.status(400).json({ error: "Email already exists" });
+  }
 
   const instructor = new InstructorModel({
     fullName,

@@ -15,9 +15,19 @@ const updateInstructorHandler = async (
   res: Response
 ) => {
   const instructorId = req.params.instructorId;
+
+  if (req.body.email) {
+    const email = req.body.email;
+    const existingInstructor = await InstructorModel.findOne({ email });
+    if (existingInstructor) {
+      return res.status(400).json({ error: "Email already exists" });
+    }
+  }
+
   // Check if the announcement exists
   const instructor = await InstructorModel.findByIdAndUpdate(
     instructorId,
+    { ...req.body },
     { new: true }
   );
 

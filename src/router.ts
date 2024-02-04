@@ -1,11 +1,9 @@
 import { Router } from "express";
 
-import exampleRoutes from "./features/example/example.routes";
+import teacherAssistantsRoutes from "features/ta/teacherAssistants.routes";
 
-const router: Router = Router();
-
-export default (): Router => {
-  exampleRoutes(router);
-
+export const teacherAssistantsRouter = (): Router => {
+  const router = Router();
+  teacherAssistantsRoutes(router);
   return router;
 };

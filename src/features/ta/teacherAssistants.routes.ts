@@ -12,7 +12,7 @@ import findTeacherAssistantById from "./logic/handlers/FindTeacherAssistantById.
 import updateTeacherAssistantValidator from "./logic/middlewares/updateTeacherAssistantValidator.middleware";
 
 
-export default (router: Router) => {
+const teacherAssistantsRoutes = (router: Router) => {
   /*
    * Create Teacher Assistant
    **/
@@ -24,7 +24,7 @@ export default (router: Router) => {
 
     asyncHandler(createTeacherAssistantHandler)
   );
-  
+
   /*
    * Delete Teacher Assistant
    **/
@@ -75,5 +75,6 @@ export default (router: Router) => {
 
     asyncHandler(findTeacherAssistantById)
   );
-
 };
+
+export default teacherAssistantsRoutes;

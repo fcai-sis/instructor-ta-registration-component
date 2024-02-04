@@ -6,7 +6,7 @@ import express, { NextFunction, Request, Response } from "express";
 
 import { isDev } from "./env";
 import logger from "./core/logger";
-import { teacherAssistantsRouter } from "router";
+import { teacherAssistantsRouter } from "./router";
 
 // Create Express server
 const app = express();

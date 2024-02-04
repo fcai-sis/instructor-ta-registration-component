@@ -2,7 +2,7 @@ import * as validator from "express-validator";
 import { NextFunction, Request, Response } from "express";
 
 import logger from "../../../../core/logger";
-import { departments } from "features/ta/data/models/TeacherAssistantmodel";
+import { departments } from "../../data/models/TeacherAssistantmodel";
 
 /**
  * Validates the request body of the create Teacher Assistant endpoint.

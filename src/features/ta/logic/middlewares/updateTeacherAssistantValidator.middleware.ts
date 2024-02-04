@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { body, validationResult } from "express-validator";
 
 import logger from "../../../../core/logger";
-import { departments } from "features/ta/data/models/TeacherAssistantmodel";
+import { departments } from "../../data/models/TeacherAssistantmodel";
 
 const updateTeacherAssistantValidator = [
   body("fullName").optional().isString().withMessage("fullName must be a string"),

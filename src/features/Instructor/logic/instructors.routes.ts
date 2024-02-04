@@ -12,7 +12,7 @@ import updateInstructorHandler from "./handlers/updateInstructor.handler";
 import findInstructorById from "./handlers/FindInstructorById.handler";
 
 
-export default (router: Router) => {
+const instructorsRoutes = (router: Router) => {
   /*
    * Create Instructor
    **/
@@ -24,7 +24,7 @@ export default (router: Router) => {
 
     asyncHandler(createInstructorHandler)
   );
-  
+
   /*
    * Delete Instructor
    **/
@@ -75,5 +75,6 @@ export default (router: Router) => {
 
     asyncHandler(findInstructorById)
   );
-
 };
+
+export default instructorsRoutes;

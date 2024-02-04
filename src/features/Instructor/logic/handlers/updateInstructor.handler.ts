@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import InstructorModel, { DepartmentTypes } from "../../data/models/Instructor.model";
 
-//TODO: Create middleware to check for if user authorized to update announcement
+//TODO: Create middleware to check for if user authorized to update instructor
 type UpdateHandlerRequest = Request<
   {
     instructorId: string;

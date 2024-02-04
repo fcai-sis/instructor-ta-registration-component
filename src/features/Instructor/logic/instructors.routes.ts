@@ -9,6 +9,7 @@ import deleteInstructorHandler from "./handlers/deleteInstructor.handler";
 import readInstructorsHandler from "./handlers/readInstructors.handler";
 import updateInstructorValidator from "./middlewares/updateInstructorValidator.middleware";
 import updateInstructorHandler from "./handlers/updateInstructor.handler";
+import findInstructorById from "./handlers/FindInstructorById.handler";
 
 
 export default (router: Router) => {
@@ -72,7 +73,7 @@ export default (router: Router) => {
     // Ensure instructor id in params
     ensureInstructorIdInParamsMiddleware,
 
-    asyncHandler(updateInstructorHandler)
+    asyncHandler(findInstructorById)
   );
 
 };

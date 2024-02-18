@@ -3,10 +3,10 @@ import morgan from "morgan";
 import helmet from "helmet";
 import compression from "compression";
 import express, { NextFunction, Request, Response } from "express";
-
 import { instructorsRouter } from "./router";
 import { isDev } from "./env";
 import logger from "./core/logger";
+import { teacherAssistantsRouter } from "./router";
 
 // Create Express server
 const app = express();
@@ -46,6 +46,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Mount API routes
+app.use("/teacherAssistants", teacherAssistantsRouter());
 app.use("/instructors", instructorsRouter());
 
 // TODO: Custom 404 handler

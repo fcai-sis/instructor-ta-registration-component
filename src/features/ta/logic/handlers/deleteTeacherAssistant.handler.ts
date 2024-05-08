@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import TeacherAssistantModel from "../../data/models/TeacherAssistantmodel";
+import { TeacherAssistantModel } from "@fcai-sis/shared-models";
 
 
 type HandlerRequest = Request<{ teacherAssistantId: string }>;

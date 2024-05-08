@@ -2,7 +2,10 @@ import * as validator from "express-validator";
 import { NextFunction, Request, Response } from "express";
 
 import logger from "../../../../core/logger";
-import { departments } from "../../data/models/TeacherAssistantmodel";
+import {
+  DepartmentModel,
+  TeacherAssistantModel,
+} from "@fcai-sis/shared-models";
 
 /**
  * Validates the request body of the create Teacher Assistant endpoint.
@@ -24,7 +27,18 @@ const middlewares = [
     .withMessage("email is required")
 
     .isEmail()
-    .withMessage("email must be a valid email"),
+    .withMessage("email must be a valid email")
+
+    .custom(async (value) => {
+      // Check if the email already exists in the database
+      const instructor = await TeacherAssistantModel.findOne({ email: value });
+
+      if (instructor) {
+        throw new Error("email already exists");
+      }
+
+      return true;
+    }),
 
   validator
     .body("department")
@@ -32,22 +46,29 @@ const middlewares = [
     .exists()
     .withMessage("department is required")
 
-    .isIn(departments)
-    .withMessage(`department must be one of these values: ${departments.join(", ")} `),
+    .isMongoId()
+    .withMessage("department must be a valid department id")
+
+    .custom(async (value) => {
+      // Check if the department exists in the database
+      const department = await DepartmentModel.findById(value);
+
+      if (!department) {
+        throw new Error("department does not exist");
+      }
+
+      return true;
+    }),
 
   (req: Request, res: Response, next: NextFunction) => {
-    logger.debug(
-      `Validating create Instructor req body: ${JSON.stringify(req.body)}`
-    );
+    logger.debug(`Validating create TA req body: ${JSON.stringify(req.body)}`);
 
     // If any of the validations above failed, return an error response
     const errors = validator.validationResult(req);
 
     if (!errors.isEmpty()) {
       logger.debug(
-        `Validation failed for create Instructor req body: ${JSON.stringify(
-          req.body
-        )}`
+        `Validation failed for create TA req body: ${JSON.stringify(req.body)}`
       );
 
       return res.status(400).json({
@@ -66,6 +87,5 @@ const middlewares = [
   },
 ];
 
-const CreateTeacherAssistantValidatorMiddleware = middlewares;
-export default CreateTeacherAssistantValidatorMiddleware;
-
+const createTeacherAssistantValidatorMiddleware = middlewares;
+export default createTeacherAssistantValidatorMiddleware;

@@ -3,7 +3,6 @@ import { body, validationResult } from "express-validator";
 
 import logger from "../../../../core/logger";
 import { DepartmentModel, InstructorModel } from "@fcai-sis/shared-models";
-// import { departments } from "../../data/models/Instructor.model";
 
 const updateInstructorValidator = [
   body("fullName")

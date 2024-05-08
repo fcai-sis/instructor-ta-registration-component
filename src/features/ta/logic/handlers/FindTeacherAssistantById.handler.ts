@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
-import TeacherAssistantModel from "../../data/models/TeacherAssistantmodel";
-
+import { TeacherAssistantModel } from "@fcai-sis/shared-models";
 
 type HandlerRequest = Request<
   {
@@ -14,22 +13,30 @@ type HandlerRequest = Request<
  * Find a TA by id.
  * */
 const findTeacherAssistantById = async (req: HandlerRequest, res: Response) => {
-    const teacherAssistantId = req.params.teacherAssistantId;
-    // read the TA from the database
-    const teacherAssistant = await TeacherAssistantModel.findById(teacherAssistantId);
-    
-    if (!teacherAssistant) {
-        return res.status(404).json({
-        error: {
-            message: "TA not found",
-        },
-        });
+  const teacherAssistantId = req.params.teacherAssistantId;
+  // read the TA from the database
+  const teacherAssistant = await TeacherAssistantModel.findById(
+    teacherAssistantId,
+    {
+      __v: 0,
+      userId: 0,
+      // _id: 0,
     }
-    
-    return res.status(200).send({
-      teacherAssistant: {
-        ...teacherAssistant.toObject(),
-        },
+  ).populate({
+    path: "department",
+    select: "-_id -__v",
+  });
+
+  if (!teacherAssistant) {
+    return res.status(404).json({
+      error: {
+        message: "TA not found",
+      },
     });
-    }
-    export default findTeacherAssistantById;
+  }
+
+  return res.status(200).send({
+    teacherAssistant,
+  });
+};
+export default findTeacherAssistantById;

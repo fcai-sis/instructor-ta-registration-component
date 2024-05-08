@@ -1,8 +1,12 @@
 import { Router } from "express";
 
 import { asyncHandler } from "@fcai-sis/shared-utilities";
-import { paginationQueryParamsMiddleware } from "@fcai-sis/shared-middlewares";
-import CreateTeacherAssistantValidatorMiddleware from "./logic/middlewares/createTeacherAssistantValidator.middleware";
+import {
+  Role,
+  checkRole,
+  paginationQueryParamsMiddleware,
+} from "@fcai-sis/shared-middlewares";
+import createTeacherAssistantValidatorMiddleware from "./logic/middlewares/createTeacherAssistantValidator.middleware";
 import createTeacherAssistantHandler from "./logic/handlers/createTeacherAssistant.handler";
 import ensureTeacherAssitantIdInParamsMiddleware from "./logic/middlewares/ensureTeacherAssistantIdInParams.middleware";
 import deleteTeacherAssistantHandler from "./logic/handlers/deleteTeacherAssistant.handler";
@@ -11,7 +15,6 @@ import updateTeacherAssistantHandler from "./logic/handlers/updateTeacherAssista
 import findTeacherAssistantById from "./logic/handlers/FindTeacherAssistantById.handler";
 import updateTeacherAssistantValidator from "./logic/middlewares/updateTeacherAssistantValidator.middleware";
 
-
 const teacherAssistantsRoutes = (router: Router) => {
   /*
    * Create Teacher Assistant
@@ -19,8 +22,9 @@ const teacherAssistantsRoutes = (router: Router) => {
   router.post(
     "/create",
 
+    checkRole([Role.EMPLOYEE, Role.ADMIN]),
     // Validate request body
-    CreateTeacherAssistantValidatorMiddleware,
+    createTeacherAssistantValidatorMiddleware,
 
     asyncHandler(createTeacherAssistantHandler)
   );
@@ -32,6 +36,7 @@ const teacherAssistantsRoutes = (router: Router) => {
   router.delete(
     "/delete/:teacherAssistantId",
 
+    checkRole([Role.EMPLOYEE, Role.ADMIN]),
     // Ensure Teacher Assistant id in params.
     ensureTeacherAssitantIdInParamsMiddleware,
 
@@ -42,7 +47,7 @@ const teacherAssistantsRoutes = (router: Router) => {
    **/
   router.get(
     "/read",
-
+    checkRole([Role.EMPLOYEE, Role.ADMIN]),
     // Validate request query params for pagination
     paginationQueryParamsMiddleware,
 
@@ -53,8 +58,8 @@ const teacherAssistantsRoutes = (router: Router) => {
    * Update Teacher Assistant
    **/
   router.patch(
-    "/update/:instructorId",
-
+    "/update/:teacherAssistantId",
+    checkRole([Role.EMPLOYEE, Role.ADMIN]),
     // Ensure Teacher Assistant id in params
     ensureTeacherAssitantIdInParamsMiddleware,
 
@@ -65,11 +70,11 @@ const teacherAssistantsRoutes = (router: Router) => {
   );
 
   /*
-    * Find Teacher Assistant by id
-    **/
+   * Find Teacher Assistant by id
+   **/
   router.get(
-    "/find/:instructorId",
-
+    "/find/:teacherAssistantId",
+    checkRole([Role.EMPLOYEE, Role.ADMIN]),
     // Ensure Teacher Assistant id in params
     ensureTeacherAssitantIdInParamsMiddleware,
 

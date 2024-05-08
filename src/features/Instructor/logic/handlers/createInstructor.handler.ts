@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 
-import InstructorModel, { DepartmentTypes } from "../../data/models/Instructor.model";
-import { MongooseError } from "mongoose";
+import { InstructorModel, UserModel } from "@fcai-sis/shared-models";
 
 type HandlerRequest = Request<
   {},
@@ -9,7 +8,8 @@ type HandlerRequest = Request<
   {
     fullName: string;
     email: string;
-    department: DepartmentTypes;
+    department: string;
+    password: string;
   }
 >;
 
@@ -17,32 +17,25 @@ type HandlerRequest = Request<
  * Creates an instructor.
  * */
 const handler = async (req: HandlerRequest, res: Response) => {
-  const { fullName, email, department } = req.body;
-  const existingInstructor = await InstructorModel.findOne({ email });
+  const { fullName, email, department, password } = req.body;
 
-  if (existingInstructor) {
-    return res.status(400).json({ error: "Email already exists" });
-  }
-
+  const user = new UserModel({ password: password });
   const instructor = new InstructorModel({
     fullName,
     email,
     department,
+    userId: user._id,
   });
 
   await instructor.save();
 
   const response = {
-    instructor: {
-      _id: instructor._id,
-      fullName: instructor.fullName,
-      email: instructor.email,
-      department: instructor.department,
-    }
-  }
+    message: "Instructor created successfully",
+    instructor,
+  };
 
   return res.status(201).json(response);
-}
+};
 
 const createInstructorHandler = handler;
 export default createInstructorHandler;

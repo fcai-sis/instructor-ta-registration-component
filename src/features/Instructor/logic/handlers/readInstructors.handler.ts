@@ -1,9 +1,7 @@
 import { Request, Response } from "express";
-import InstructorModel from "../../data/models/Instructor.model";
-
+import { InstructorModel } from "@fcai-sis/shared-models";
 
 type HandlerRequest = Request;
-
 
 /*
  * Reads all Instructors
@@ -14,15 +12,28 @@ const handler = async (req: HandlerRequest, res: Response) => {
   const pageSize = req.context.pageSize;
 
   // read the instructors from the db
-  const instructors = await InstructorModel.find()
-    .skip((page - 1) * pageSize) // pagination
+  const instructors = await InstructorModel.find(
+    {},
+    {
+      __v: 0,
+      // _id: 0, // TODO: should probably not reveal the _id but likely needed for frontend
+      userId: 0,
+    }
+  )
+    .populate({
+      path: "department",
+      select: "-_id -__v",
+    })
+    .skip((page - 1) * pageSize)
     .limit(pageSize);
 
-  return res.status(200).send({
-    instructors: instructors.map(instructors => ({
-      ...instructors.toObject(),
-    })),
-  });
+  const response = {
+    instructors,
+    page,
+    pageSize,
+  };
+
+  return res.status(200).json(response);
 };
 
 const readInstructorsHandler = handler;

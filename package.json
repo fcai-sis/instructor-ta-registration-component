@@ -16,7 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@fcai-sis/shared-middlewares": "latest",
+    "@fcai-sis/shared-middlewares": "^2.4.1",
     "@fcai-sis/shared-models": "latest",
     "@fcai-sis/shared-utilities": "latest",
     "compression": "^1.7.4",

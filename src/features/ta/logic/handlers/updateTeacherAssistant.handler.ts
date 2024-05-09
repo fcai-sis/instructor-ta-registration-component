@@ -6,7 +6,7 @@ type UpdateHandlerRequest = Request<
     teacherAssistantId: string;
   },
   {},
-  { fullName?: string; email?: string; department?: any }
+  { fullName?: string; email?: string; department?: string }
 >;
 
 const updateTeacherAssistantHandler = async (

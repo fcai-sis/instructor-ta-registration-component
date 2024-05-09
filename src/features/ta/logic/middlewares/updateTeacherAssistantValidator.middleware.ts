@@ -45,7 +45,7 @@ const updateTeacherAssistantValidator = [
 
   (req: Request, res: Response, next: NextFunction) => {
     logger.debug(
-      `Validating update announcement req body: ${JSON.stringify(req.body)}`
+      `Validating update TA req body: ${JSON.stringify(req.body)}`
     );
 
     // If any of the validations above failed, return an error response

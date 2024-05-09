@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-
+import bcrypt from "bcrypt";
 import { InstructorModel, UserModel } from "@fcai-sis/shared-models";
 
 type HandlerRequest = Request<
@@ -19,7 +19,9 @@ type HandlerRequest = Request<
 const handler = async (req: HandlerRequest, res: Response) => {
   const { fullName, email, department, password } = req.body;
 
-  const user = new UserModel({ password: password });
+  const hashedPassword = bcrypt.hashSync(password, 10);
+
+  const user = new UserModel({ password: hashedPassword });
   const instructor = new InstructorModel({
     fullName,
     email,

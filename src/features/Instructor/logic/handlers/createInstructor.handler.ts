@@ -21,7 +21,7 @@ const handler = async (req: HandlerRequest, res: Response) => {
 
   const hashedPassword = bcrypt.hashSync(password, 10);
 
-  const user = new UserModel({ password: hashedPassword });
+  const user = await UserModel.create({ password: hashedPassword });
   const instructor = new InstructorModel({
     fullName,
     email,

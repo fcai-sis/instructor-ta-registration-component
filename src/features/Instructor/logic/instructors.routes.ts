@@ -2,7 +2,7 @@ import { Router } from "express";
 
 import { asyncHandler } from "@fcai-sis/shared-utilities";
 import { paginationQueryParamsMiddleware } from "@fcai-sis/shared-middlewares";
-import CreateInstructorValidatorMiddleware from "./middlewares/createInstructorValidator.middleware";
+import createInstructorValidatorMiddleware from "./middlewares/createInstructorValidator.middleware";
 import createInstructorHandler from "./handlers/createInstructor.handler";
 import ensureInstructorIdInParamsMiddleware from "./middlewares/ensureInstructorIdInParams.middleware";
 import deleteInstructorHandler from "./handlers/deleteInstructor.handler";
@@ -10,7 +10,7 @@ import readInstructorsHandler from "./handlers/readInstructors.handler";
 import updateInstructorValidator from "./middlewares/updateInstructorValidator.middleware";
 import updateInstructorHandler from "./handlers/updateInstructor.handler";
 import findInstructorById from "./handlers/FindInstructorById.handler";
-
+import { Role, checkRole } from "@fcai-sis/shared-middlewares";
 
 const instructorsRoutes = (router: Router) => {
   /*
@@ -20,7 +20,8 @@ const instructorsRoutes = (router: Router) => {
     "/create",
 
     // Validate request body
-    CreateInstructorValidatorMiddleware,
+    checkRole([Role.EMPLOYEE, Role.ADMIN]),
+    createInstructorValidatorMiddleware,
 
     asyncHandler(createInstructorHandler)
   );
@@ -32,6 +33,7 @@ const instructorsRoutes = (router: Router) => {
   router.delete(
     "/delete/:instructorId",
 
+    checkRole([Role.EMPLOYEE, Role.ADMIN]),
     // Ensure Instructor id in params.
     ensureInstructorIdInParamsMiddleware,
 
@@ -43,6 +45,7 @@ const instructorsRoutes = (router: Router) => {
   router.get(
     "/read",
 
+    checkRole([Role.EMPLOYEE, Role.ADMIN]),
     // Validate request query params for pagination
     paginationQueryParamsMiddleware,
 
@@ -55,6 +58,7 @@ const instructorsRoutes = (router: Router) => {
   router.patch(
     "/update/:instructorId",
 
+    checkRole([Role.EMPLOYEE, Role.ADMIN]),
     // Ensure instructor id in params
     ensureInstructorIdInParamsMiddleware,
 
@@ -65,11 +69,12 @@ const instructorsRoutes = (router: Router) => {
   );
 
   /*
-    * Find instructor by id
-    **/
+   * Find instructor by id
+   **/
   router.get(
     "/find/:instructorId",
 
+    checkRole([Role.EMPLOYEE, Role.ADMIN]),
     // Ensure instructor id in params
     ensureInstructorIdInParamsMiddleware,
 

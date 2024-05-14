@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
-import InstructorModel from "../../data/models/Instructor.model";
-
+import { InstructorModel } from "@fcai-sis/shared-models";
 
 type HandlerRequest = Request<{ instructorId: string }>;
 
@@ -10,9 +9,7 @@ type HandlerRequest = Request<{ instructorId: string }>;
 const handler = async (req: HandlerRequest, res: Response) => {
   const instructor = req.params.instructorId;
 
-  const deletedInstructor = await InstructorModel.findByIdAndDelete(
-    instructor
-  );
+  const deletedInstructor = await InstructorModel.findByIdAndDelete(instructor);
 
   if (!deletedInstructor) {
     return res.status(404).send({
@@ -23,7 +20,7 @@ const handler = async (req: HandlerRequest, res: Response) => {
   }
 
   return res.status(200).send({
-    data: deletedInstructor,
+    instructor: deletedInstructor,
     message: "Instructor deleted successfully",
   });
 };

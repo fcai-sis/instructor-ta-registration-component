@@ -2,7 +2,7 @@ import * as validator from "express-validator";
 import { NextFunction, Request, Response } from "express";
 
 import logger from "../../../../core/logger";
-import { departments } from "../../data/models/Instructor.model";
+import { DepartmentModel, InstructorModel } from "@fcai-sis/shared-models";
 
 /**
  * Validates the request body of the create Instructor endpoint.
@@ -24,7 +24,18 @@ const middlewares = [
     .withMessage("email is required")
 
     .isEmail()
-    .withMessage("email must be a valid email"),
+    .withMessage("email must be a valid email")
+
+    .custom(async (value) => {
+      // Check if the email already exists in the database
+      const instructor = await InstructorModel.findOne({ email: value });
+
+      if (instructor) {
+        throw new Error("email already exists");
+      }
+
+      return true;
+    }),
 
   validator
     .body("department")
@@ -32,8 +43,19 @@ const middlewares = [
     .exists()
     .withMessage("department is required")
 
-    .isIn(departments)
-    .withMessage(`department must be one of these values: ${departments.join(", ")} `),
+    .isMongoId()
+    .withMessage("department must be a valid department id")
+
+    .custom(async (value) => {
+      // Check if the department exists in the database
+      const department = await DepartmentModel.findById(value);
+
+      if (!department) {
+        throw new Error("department does not exist");
+      }
+
+      return true;
+    }),
 
   (req: Request, res: Response, next: NextFunction) => {
     logger.debug(
@@ -66,6 +88,5 @@ const middlewares = [
   },
 ];
 
-const CreateInstructorValidatorMiddleware = middlewares;
-export default CreateInstructorValidatorMiddleware;
-
+const createInstructorValidatorMiddleware = middlewares;
+export default createInstructorValidatorMiddleware;

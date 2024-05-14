@@ -7,6 +7,7 @@ import { instructorsRouter } from "./router";
 import { isDev } from "./env";
 import logger from "./core/logger";
 import { teacherAssistantsRouter } from "./router";
+import cookieParser from "cookie-parser";
 
 // Create Express server
 const app = express();
@@ -24,6 +25,9 @@ app.use(
     skip: () => isDev,
   })
 );
+
+// Use cookie parser middleware
+app.use(cookieParser());
 
 // Use helmet to secure HTTP headers
 // https://expressjs.com/en/advanced/best-practice-security.html#use-helmet

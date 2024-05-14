@@ -1,9 +1,7 @@
 import { Request, Response } from "express";
-import TeacherAssistantModel from "../../data/models/TeacherAssistantmodel";
-
+import { TeacherAssistantModel } from "@fcai-sis/shared-models";
 
 type HandlerRequest = Request;
-
 
 /*
  * Reads all Teacher Assistants from the database
@@ -14,15 +12,28 @@ const handler = async (req: HandlerRequest, res: Response) => {
   const pageSize = req.context.pageSize;
 
   // read the instructors from the db
-  const teacherAssistants = await TeacherAssistantModel.find()
-    .skip((page - 1) * pageSize) // pagination
+  const teacherAssistant = await TeacherAssistantModel.find(
+    {},
+    {
+      __v: 0,
+      userId: 0,
+      // _id: 0, TODO: should probably not reveal the _id but likely needed for frontend
+    }
+  )
+    .populate({
+      path: "department",
+      select: "-_id -__v",
+    })
+    .skip((page - 1) * pageSize)
     .limit(pageSize);
 
-  return res.status(200).send({
-    teacherAssistants: teacherAssistants.map(teacherAssistants => ({
-      ...teacherAssistants.toObject(),
-    })),
-  });
+  const response = {
+    teacherAssistant,
+    page,
+    pageSize,
+  };
+
+  return res.status(200).json(response);
 };
 
 const readTeacherAssistantsHandler = handler;

@@ -1,13 +1,12 @@
 import { Request, Response } from "express";
-import TeacherAssistantModel, { DepartmentTypes } from "../../data/models/TeacherAssistantmodel";
+import { TeacherAssistantModel } from "@fcai-sis/shared-models";
 
-//TODO: Create middleware to check for if user authorized to update Teacher Assistant
 type UpdateHandlerRequest = Request<
   {
     teacherAssistantId: string;
   },
   {},
-  { fullName?: string; email?: string; department?: DepartmentTypes }
+  { fullName?: string; email?: string; department?: string }
 >;
 
 const updateTeacherAssistantHandler = async (
@@ -15,19 +14,16 @@ const updateTeacherAssistantHandler = async (
   res: Response
 ) => {
   const teacherAssistantId = req.params.teacherAssistantId;
-
-  if (req.body.email) {
-    const email = req.body.email;
-    const existingTeacherAssistant = await TeacherAssistantModel.findOne({ email });
-    if (existingTeacherAssistant) {
-      return res.status(400).json({ error: "Email already exists" });
-    }
-  }
+  const { fullName, email, department } = req.body;
 
   // Check if the teacher assistant exists
   const teacherAssistant = await TeacherAssistantModel.findByIdAndUpdate(
     teacherAssistantId,
-    { ...req.body },
+    {
+      ...(fullName && { fullName }),
+      ...(email && { email }),
+      ...(department && { department }),
+    },
     { new: true }
   );
 

@@ -1,13 +1,12 @@
 import { Request, Response } from "express";
-import InstructorModel, { DepartmentTypes } from "../../data/models/Instructor.model";
+import { InstructorModel } from "@fcai-sis/shared-models";
 
-//TODO: Create middleware to check for if user authorized to update instructor
 type UpdateHandlerRequest = Request<
   {
     instructorId: string;
   },
   {},
-  { fullName?: string; email?: string; department?: DepartmentTypes }
+  { fullName?: string; email?: string; department?: string }
 >;
 
 const updateInstructorHandler = async (
@@ -15,19 +14,15 @@ const updateInstructorHandler = async (
   res: Response
 ) => {
   const instructorId = req.params.instructorId;
+  const { fullName, email, department } = req.body;
 
-  if (req.body.email) {
-    const email = req.body.email;
-    const existingInstructor = await InstructorModel.findOne({ email });
-    if (existingInstructor) {
-      return res.status(400).json({ error: "Email already exists" });
-    }
-  }
-
-  // Check if the announcement exists
   const instructor = await InstructorModel.findByIdAndUpdate(
     instructorId,
-    { ...req.body },
+    {
+      ...(fullName && { fullName }),
+      ...(email && { email }),
+      ...(department && { department }),
+    },
     { new: true }
   );
 

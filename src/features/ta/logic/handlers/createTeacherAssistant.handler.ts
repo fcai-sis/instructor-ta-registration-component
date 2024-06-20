@@ -27,7 +27,7 @@ const handler = async (req: HandlerRequest, res: Response) => {
     fullName,
     email,
     department,
-    userId: user._id,
+    user: user._id,
   });
 
   await teacherAssistant.save();

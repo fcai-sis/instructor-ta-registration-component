@@ -18,7 +18,7 @@ const findInstructorById = async (req: HandlerRequest, res: Response) => {
   const instructor = await InstructorModel.findById(instructorId, {
     __v: 0,
     // _id: 0,
-    userId: 0,
+    user: 0,
   }).populate({
     path: "department",
     select: "-_id -__v",

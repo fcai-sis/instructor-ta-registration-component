@@ -16,7 +16,7 @@ const handler = async (req: HandlerRequest, res: Response) => {
     {},
     {
       __v: 0,
-      userId: 0,
+      user: 0,
       // _id: 0, TODO: should probably not reveal the _id but likely needed for frontend
     }
   )

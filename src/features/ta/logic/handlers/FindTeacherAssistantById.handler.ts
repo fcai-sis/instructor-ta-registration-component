@@ -19,7 +19,7 @@ const findTeacherAssistantById = async (req: HandlerRequest, res: Response) => {
     teacherAssistantId,
     {
       __v: 0,
-      userId: 0,
+      user: 0,
       // _id: 0,
     }
   ).populate({

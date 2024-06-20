@@ -10,7 +10,7 @@ type HandlerRequest = Request<
   {},
   {},
   {
-    instructor: InstructorType;
+    instructor: Omit<InstructorType, "user">;
     password: string;
   }
 >;
@@ -20,7 +20,7 @@ type HandlerRequest = Request<
  * */
 const createInstructorHandler = async (req: HandlerRequest, res: Response) => {
   const { instructor, password } = req.body;
-  const hashedPassword = bcrypt.hashSync(password.toString(), 10);
+  const hashedPassword = bcrypt.hashSync(password, 10);
 
   const user = await UserModel.create({ password: hashedPassword });
   const createdInstructor = await InstructorModel.create({

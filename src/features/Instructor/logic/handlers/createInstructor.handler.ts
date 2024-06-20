@@ -1,14 +1,16 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
-import { InstructorModel, UserModel } from "@fcai-sis/shared-models";
+import {
+  InstructorModel,
+  InstructorType,
+  UserModel,
+} from "@fcai-sis/shared-models";
 
 type HandlerRequest = Request<
   {},
   {},
   {
-    fullName: string;
-    email: string;
-    department: string;
+    instructor: InstructorType;
     password: string;
   }
 >;
@@ -16,28 +18,30 @@ type HandlerRequest = Request<
 /*
  * Creates an instructor.
  * */
-const handler = async (req: HandlerRequest, res: Response) => {
-  const { fullName, email, department, password } = req.body;
-
-  const hashedPassword = bcrypt.hashSync(password, 10);
+const createInstructorHandler = async (req: HandlerRequest, res: Response) => {
+  const { instructor, password } = req.body;
+  const hashedPassword = bcrypt.hashSync(password.toString(), 10);
 
   const user = await UserModel.create({ password: hashedPassword });
-  const instructor = new InstructorModel({
-    fullName,
-    email,
-    department,
-    userId: user._id,
+  const createdInstructor = await InstructorModel.create({
+    fullName: instructor.fullName,
+    department: instructor.department,
+    email: instructor.email,
+    user: user._id,
   });
 
-  await instructor.save();
+  await createdInstructor.save();
 
   const response = {
     message: "Instructor created successfully",
-    instructor,
+    instructor: {
+      ...createdInstructor.toJSON(),
+      _id: undefined,
+      __v: undefined,
+    },
   };
 
   return res.status(201).json(response);
 };
 
-const createInstructorHandler = handler;
 export default createInstructorHandler;

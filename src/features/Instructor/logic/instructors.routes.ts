@@ -1,7 +1,6 @@
 import { Router } from "express";
 
 import { asyncHandler } from "@fcai-sis/shared-utilities";
-import { paginationQueryParamsMiddleware } from "@fcai-sis/shared-middlewares";
 import createInstructorValidatorMiddleware from "./middlewares/createInstructorValidator.middleware";
 import createInstructorHandler from "./handlers/createInstructor.handler";
 import ensureInstructorIdInParamsMiddleware from "./middlewares/ensureInstructorIdInParams.middleware";
@@ -11,6 +10,7 @@ import updateInstructorValidator from "./middlewares/updateInstructorValidator.m
 import updateInstructorHandler from "./handlers/updateInstructor.handler";
 import findInstructorById from "./handlers/FindInstructorById.handler";
 import { Role, checkRole } from "@fcai-sis/shared-middlewares";
+import paginate from "express-paginate";
 
 const instructorsRoutes = (router: Router) => {
   /*
@@ -47,7 +47,7 @@ const instructorsRoutes = (router: Router) => {
 
     checkRole([Role.EMPLOYEE, Role.ADMIN]),
     // Validate request query params for pagination
-    paginationQueryParamsMiddleware,
+    paginate.middleware(),
 
     asyncHandler(readInstructorsHandler)
   );

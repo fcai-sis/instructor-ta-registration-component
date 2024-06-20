@@ -6,7 +6,7 @@ type HandlerRequest = Request<{ instructorId: string }>;
 /*
  * Deletes an instructor
  * */
-const handler = async (req: HandlerRequest, res: Response) => {
+const deleteInstructorHandler = async (req: HandlerRequest, res: Response) => {
   const instructor = req.params.instructorId;
 
   const deletedInstructor = await InstructorModel.findByIdAndDelete(instructor);
@@ -25,5 +25,4 @@ const handler = async (req: HandlerRequest, res: Response) => {
   });
 };
 
-const deleteInstructorHandler = handler;
 export default deleteInstructorHandler;

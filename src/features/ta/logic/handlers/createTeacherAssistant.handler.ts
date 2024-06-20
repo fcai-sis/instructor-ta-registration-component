@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
-import { TeacherAssistantModel } from "@fcai-sis/shared-models";
+import { TeachingAssistantModel } from "@fcai-sis/shared-models";
 import { UserModel } from "@fcai-sis/shared-models";
 
 type HandlerRequest = Request<
@@ -23,7 +23,7 @@ const handler = async (req: HandlerRequest, res: Response) => {
   const hashedPassword = bcrypt.hashSync(password, 10);
 
   const user = await UserModel.create({ password: hashedPassword });
-  const teacherAssistant = new TeacherAssistantModel({
+  const teacherAssistant = new TeachingAssistantModel({
     fullName,
     email,
     department,

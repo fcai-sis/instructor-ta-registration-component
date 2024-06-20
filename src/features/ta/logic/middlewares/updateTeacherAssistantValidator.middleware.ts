@@ -4,7 +4,7 @@ import { body, validationResult } from "express-validator";
 import logger from "../../../../core/logger";
 import {
   DepartmentModel,
-  TeacherAssistantModel,
+  TeachingAssistantModel,
 } from "@fcai-sis/shared-models";
 
 const updateTeacherAssistantValidator = [
@@ -19,7 +19,7 @@ const updateTeacherAssistantValidator = [
     .withMessage("email must be a valid email")
     .custom(async (value) => {
       // Check if the email already exists in the database
-      const instructor = await TeacherAssistantModel.findOne({ email: value });
+      const instructor = await TeachingAssistantModel.findOne({ email: value });
 
       if (instructor) {
         throw new Error("email already exists");
@@ -44,9 +44,7 @@ const updateTeacherAssistantValidator = [
     }),
 
   (req: Request, res: Response, next: NextFunction) => {
-    logger.debug(
-      `Validating update TA req body: ${JSON.stringify(req.body)}`
-    );
+    logger.debug(`Validating update TA req body: ${JSON.stringify(req.body)}`);
 
     // If any of the validations above failed, return an error response
     const allowedFields = ["fullName", "email", "department", "user"];

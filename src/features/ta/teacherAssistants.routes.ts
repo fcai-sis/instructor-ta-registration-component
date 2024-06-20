@@ -1,11 +1,7 @@
 import { Router } from "express";
 
 import { asyncHandler } from "@fcai-sis/shared-utilities";
-import {
-  Role,
-  checkRole,
-  paginationQueryParamsMiddleware,
-} from "@fcai-sis/shared-middlewares";
+import { Role, checkRole } from "@fcai-sis/shared-middlewares";
 import createTeacherAssistantValidatorMiddleware from "./logic/middlewares/createTeacherAssistantValidator.middleware";
 import createTeacherAssistantHandler from "./logic/handlers/createTeacherAssistant.handler";
 import ensureTeacherAssitantIdInParamsMiddleware from "./logic/middlewares/ensureTeacherAssistantIdInParams.middleware";
@@ -49,7 +45,7 @@ const teacherAssistantsRoutes = (router: Router) => {
     "/read",
     checkRole([Role.EMPLOYEE, Role.ADMIN]),
     // Validate request query params for pagination
-    paginationQueryParamsMiddleware,
+    // paginationQueryParamsMiddleware,
 
     asyncHandler(readTeacherAssistantsHandler)
   );

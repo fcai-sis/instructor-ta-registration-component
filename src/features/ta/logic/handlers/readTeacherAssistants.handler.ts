@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { TeacherAssistantModel } from "@fcai-sis/shared-models";
+import { TeachingAssistantModel } from "@fcai-sis/shared-models";
 
 type HandlerRequest = Request;
 
@@ -12,7 +12,7 @@ const handler = async (req: HandlerRequest, res: Response) => {
   const pageSize = req.context.pageSize;
 
   // read the instructors from the db
-  const teacherAssistant = await TeacherAssistantModel.find(
+  const teacherAssistant = await TeachingAssistantModel.find(
     {},
     {
       __v: 0,

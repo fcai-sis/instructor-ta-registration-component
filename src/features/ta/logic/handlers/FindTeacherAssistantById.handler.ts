@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { TeacherAssistantModel } from "@fcai-sis/shared-models";
+import { TeachingAssistantModel } from "@fcai-sis/shared-models";
 
 type HandlerRequest = Request<
   {
@@ -15,7 +15,7 @@ type HandlerRequest = Request<
 const findTeacherAssistantById = async (req: HandlerRequest, res: Response) => {
   const teacherAssistantId = req.params.teacherAssistantId;
   // read the TA from the database
-  const teacherAssistant = await TeacherAssistantModel.findById(
+  const teacherAssistant = await TeachingAssistantModel.findById(
     teacherAssistantId,
     {
       __v: 0,

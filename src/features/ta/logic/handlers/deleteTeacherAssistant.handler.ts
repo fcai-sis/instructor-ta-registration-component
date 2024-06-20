@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
-import { TeacherAssistantModel } from "@fcai-sis/shared-models";
-
+import { TeachingAssistantModel } from "@fcai-sis/shared-models";
 
 type HandlerRequest = Request<{ teacherAssistantId: string }>;
 
@@ -10,9 +9,8 @@ type HandlerRequest = Request<{ teacherAssistantId: string }>;
 const handler = async (req: HandlerRequest, res: Response) => {
   const teacherAssistant = req.params.teacherAssistantId;
 
-  const deletedTeacherAssistant = await TeacherAssistantModel.findByIdAndDelete(
-    teacherAssistant
-  );
+  const deletedTeacherAssistant =
+    await TeachingAssistantModel.findByIdAndDelete(teacherAssistant);
 
   if (!deletedTeacherAssistant) {
     return res.status(404).send({

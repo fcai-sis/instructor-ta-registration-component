@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { TeacherAssistantModel } from "@fcai-sis/shared-models";
+import { TeachingAssistantModel } from "@fcai-sis/shared-models";
 
 type UpdateHandlerRequest = Request<
   {
@@ -17,7 +17,7 @@ const updateTeacherAssistantHandler = async (
   const { fullName, email, department } = req.body;
 
   // Check if the teacher assistant exists
-  const teacherAssistant = await TeacherAssistantModel.findByIdAndUpdate(
+  const teacherAssistant = await TeachingAssistantModel.findByIdAndUpdate(
     teacherAssistantId,
     {
       ...(fullName && { fullName }),

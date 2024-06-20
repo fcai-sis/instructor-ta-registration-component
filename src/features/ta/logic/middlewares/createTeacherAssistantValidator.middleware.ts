@@ -4,7 +4,7 @@ import { NextFunction, Request, Response } from "express";
 import logger from "../../../../core/logger";
 import {
   DepartmentModel,
-  TeacherAssistantModel,
+  TeachingAssistantModel,
 } from "@fcai-sis/shared-models";
 
 /**
@@ -31,7 +31,7 @@ const middlewares = [
 
     .custom(async (value) => {
       // Check if the email already exists in the database
-      const instructor = await TeacherAssistantModel.findOne({ email: value });
+      const instructor = await TeachingAssistantModel.findOne({ email: value });
 
       if (instructor) {
         throw new Error("email already exists");

@@ -1,12 +1,14 @@
 import { Request, Response } from "express";
-import { InstructorModel } from "@fcai-sis/shared-models";
+import { InstructorModel, InstructorType } from "@fcai-sis/shared-models";
 
 type UpdateHandlerRequest = Request<
   {
     instructorId: string;
   },
   {},
-  { fullName?: string; email?: string; department?: string }
+  {
+    instructor: Partial<InstructorType>;
+  }
 >;
 
 const updateInstructorHandler = async (
@@ -14,19 +16,19 @@ const updateInstructorHandler = async (
   res: Response
 ) => {
   const instructorId = req.params.instructorId;
-  const { fullName, email, department } = req.body;
+  const { instructor } = req.body;
 
-  const instructor = await InstructorModel.findByIdAndUpdate(
+  const updatedInstructor = await InstructorModel.findByIdAndUpdate(
     instructorId,
     {
-      ...(fullName && { fullName }),
-      ...(email && { email }),
-      ...(department && { department }),
+      ...(instructor.fullName && { fullName: instructor.fullName }),
+      ...(instructor.email && { email: instructor.email }),
+      ...(instructor.department && { department: instructor.department }),
     },
-    { new: true }
+    { new: true, runValidators: true }
   );
 
-  if (!instructor) {
+  if (!updatedInstructor) {
     return res.status(404).json({
       error: {
         message: "Instructor not found",
@@ -35,11 +37,11 @@ const updateInstructorHandler = async (
   }
 
   const response = {
+    message: "Instructor updated successfully",
     instructor: {
-      _id: instructor._id,
-      fullName: instructor.fullName,
-      email: instructor.email,
-      department: instructor.department,
+      ...updatedInstructor.toJSON(),
+      _id: undefined,
+      __v: undefined,
     },
   };
 

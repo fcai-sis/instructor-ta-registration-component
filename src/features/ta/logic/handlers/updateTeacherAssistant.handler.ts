@@ -1,50 +1,58 @@
 import { Request, Response } from "express";
-import { TeachingAssistantModel } from "@fcai-sis/shared-models";
+import {
+  TeachingAssistantModel,
+  TeachingAssistantType,
+} from "@fcai-sis/shared-models";
 
 type UpdateHandlerRequest = Request<
   {
-    teacherAssistantId: string;
+    teachingAssistantId: string;
   },
   {},
-  { fullName?: string; email?: string; department?: string }
+  {
+    teachingAssistant: Partial<TeachingAssistantType>;
+  }
 >;
 
-const updateTeacherAssistantHandler = async (
+const updateTeachingAssistantHandler = async (
   req: UpdateHandlerRequest,
   res: Response
 ) => {
-  const teacherAssistantId = req.params.teacherAssistantId;
-  const { fullName, email, department } = req.body;
+  const teachingAssistantId = req.params.teachingAssistantId;
+  const { teachingAssistant } = req.body;
 
-  // Check if the teacher assistant exists
-  const teacherAssistant = await TeachingAssistantModel.findByIdAndUpdate(
-    teacherAssistantId,
+  const updatedTa = await TeachingAssistantModel.findByIdAndUpdate(
+    teachingAssistantId,
     {
-      ...(fullName && { fullName }),
-      ...(email && { email }),
-      ...(department && { department }),
+      ...(teachingAssistant.fullName && {
+        fullName: teachingAssistant.fullName,
+      }),
+      ...(teachingAssistant.email && { email: teachingAssistant.email }),
+      ...(teachingAssistant.department && {
+        department: teachingAssistant.department,
+      }),
     },
-    { new: true }
+    { new: true, runValidators: true }
   );
 
-  if (!teacherAssistant) {
+  if (!updatedTa) {
     return res.status(404).json({
       error: {
-        message: "Teacher Assistant not found",
+        message: "Teaching Assistant not found",
       },
     });
   }
 
   const response = {
-    teacherAssistant: {
-      _id: teacherAssistant._id,
-      fullName: teacherAssistant.fullName,
-      email: teacherAssistant.email,
-      department: teacherAssistant.department,
+    message: "Teaching Assistant updated successfully",
+    instructor: {
+      ...updatedTa.toJSON(),
+      _id: undefined,
+      __v: undefined,
     },
   };
 
   return res.status(200).json(response);
 };
 
-export default updateTeacherAssistantHandler;
+export default updateTeachingAssistantHandler;

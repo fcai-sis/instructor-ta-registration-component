@@ -1,44 +1,47 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
-import { TeachingAssistantModel } from "@fcai-sis/shared-models";
-import { UserModel } from "@fcai-sis/shared-models";
+import {
+  TeachingAssistantType,
+  TeachingAssistantModel,
+  UserModel,
+} from "@fcai-sis/shared-models";
 
 type HandlerRequest = Request<
   {},
   {},
   {
-    fullName: string;
-    email: string;
-    department: string;
+    teachingAssistant: Omit<TeachingAssistantType, "user">;
     password: string;
   }
 >;
 
 /*
- * Creates a TA.
+ * Creates a teaching assistant.
  * */
-const handler = async (req: HandlerRequest, res: Response) => {
-  const { fullName, email, department, password } = req.body;
-
+const createTaHandler = async (req: HandlerRequest, res: Response) => {
+  const { teachingAssistant, password } = req.body;
   const hashedPassword = bcrypt.hashSync(password, 10);
 
   const user = await UserModel.create({ password: hashedPassword });
-  const teacherAssistant = new TeachingAssistantModel({
-    fullName,
-    email,
-    department,
+  const createdTa = await TeachingAssistantModel.create({
+    fullName: teachingAssistant.fullName,
+    department: teachingAssistant.department,
+    email: teachingAssistant.email,
     user: user._id,
   });
 
-  await teacherAssistant.save();
+  await createdTa.save();
 
   const response = {
-    message: "TA created successfully",
-    teacherAssistant,
+    message: "Teaching Assistant created successfully",
+    instructor: {
+      ...createdTa.toJSON(),
+      _id: undefined,
+      __v: undefined,
+    },
   };
 
   return res.status(201).json(response);
 };
 
-const createTeacherAssistantHandler = handler;
-export default createTeacherAssistantHandler;
+export default createTaHandler;

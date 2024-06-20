@@ -1,18 +1,13 @@
 import * as validator from "express-validator";
-import { NextFunction, Request, Response } from "express";
-
-import logger from "../../../../core/logger";
-import {
-  DepartmentModel,
-  TeachingAssistantModel,
-} from "@fcai-sis/shared-models";
+import { TeachingAssistantModel } from "@fcai-sis/shared-models";
+import { validateRequestMiddleware } from "@fcai-sis/shared-middlewares";
 
 /**
- * Validates the request body of the create Teacher Assistant endpoint.
+ * Validates the request body of the create Ta endpoint.
  */
 const middlewares = [
   validator
-    .body("fullName")
+    .body("teachingAssistant.fullName")
 
     .exists()
     .withMessage("fullName is required")
@@ -21,7 +16,7 @@ const middlewares = [
     .withMessage("fullName must be a string"),
 
   validator
-    .body("email")
+    .body("teachingAssistant.email")
 
     .exists()
     .withMessage("email is required")
@@ -34,58 +29,23 @@ const middlewares = [
       const instructor = await TeachingAssistantModel.findOne({ email: value });
 
       if (instructor) {
-        throw new Error("email already exists");
+        throw new Error("Teaching Assistant with this email already exists");
       }
 
       return true;
     }),
 
   validator
-    .body("department")
+    .body("teachingAssistant.department")
 
     .exists()
     .withMessage("department is required")
 
-    .isMongoId()
-    .withMessage("department must be a valid department id")
+    .isString()
+    .withMessage("department must be a string"),
 
-    .custom(async (value) => {
-      // Check if the department exists in the database
-      const department = await DepartmentModel.findById(value);
-
-      if (!department) {
-        throw new Error("department does not exist");
-      }
-
-      return true;
-    }),
-
-  (req: Request, res: Response, next: NextFunction) => {
-    logger.debug(`Validating create TA req body: ${JSON.stringify(req.body)}`);
-
-    // If any of the validations above failed, return an error response
-    const errors = validator.validationResult(req);
-
-    if (!errors.isEmpty()) {
-      logger.debug(
-        `Validation failed for create TA req body: ${JSON.stringify(req.body)}`
-      );
-
-      return res.status(400).json({
-        error: {
-          message: errors.array()[0].msg,
-        },
-      });
-    }
-
-    // Attach the validated data to the request body
-    req.body.fullName = req.body.fullName.trim();
-    req.body.email = req.body.email.trim();
-    req.body.department = req.body.department;
-
-    next();
-  },
+  validateRequestMiddleware,
 ];
 
-const createTeacherAssistantValidatorMiddleware = middlewares;
-export default createTeacherAssistantValidatorMiddleware;
+const createTaValidatorMiddleware = middlewares;
+export default createTaValidatorMiddleware;

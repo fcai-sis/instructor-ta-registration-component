@@ -4,37 +4,37 @@ import { TeachingAssistantModel } from "@fcai-sis/shared-models";
 type HandlerRequest = Request;
 
 /*
- * Reads all Teacher Assistants from the database
+ * Reads all TAs
  * */
-const handler = async (req: HandlerRequest, res: Response) => {
-  // get the pagination parameters
-  const page = req.context.page;
-  const pageSize = req.context.pageSize;
-
+const readTeachingAssistantsHandler = async (
+  req: HandlerRequest,
+  res: Response
+) => {
   // read the instructors from the db
-  const teacherAssistant = await TeachingAssistantModel.find(
+  const teachingAssistants = await TeachingAssistantModel.find(
     {},
     {
       __v: 0,
+      // _id: 0, // TODO: should probably not reveal the _id but likely needed for frontend
       user: 0,
-      // _id: 0, TODO: should probably not reveal the _id but likely needed for frontend
+    },
+    {
+      skip: req.skip,
+      limit: req.query.limit as unknown as number,
     }
-  )
-    .populate({
-      path: "department",
-      select: "-_id -__v",
-    })
-    .skip((page - 1) * pageSize)
-    .limit(pageSize);
+  ).populate({
+    path: "department",
+    select: "-_id -__v",
+  });
+
+  const totalInstructors = await TeachingAssistantModel.countDocuments({});
 
   const response = {
-    teacherAssistant,
-    page,
-    pageSize,
+    teachingAssistants,
+    totalInstructors,
   };
 
   return res.status(200).json(response);
 };
 
-const readTeacherAssistantsHandler = handler;
-export default readTeacherAssistantsHandler;
+export default readTeachingAssistantsHandler;

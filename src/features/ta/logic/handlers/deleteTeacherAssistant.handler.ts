@@ -1,18 +1,21 @@
 import { Request, Response } from "express";
 import { TeachingAssistantModel } from "@fcai-sis/shared-models";
 
-type HandlerRequest = Request<{ teacherAssistantId: string }>;
+type HandlerRequest = Request<{ teachingAssistantId: string }>;
 
 /*
  * Deletes a TA.
  * */
-const handler = async (req: HandlerRequest, res: Response) => {
-  const teacherAssistant = req.params.teacherAssistantId;
+const deleteTeacherAssistantHandler = async (
+  req: HandlerRequest,
+  res: Response
+) => {
+  const teachingAssistant = req.params.teachingAssistantId;
 
-  const deletedTeacherAssistant =
-    await TeachingAssistantModel.findByIdAndDelete(teacherAssistant);
+  const deletedTeachingAssistant =
+    await TeachingAssistantModel.findByIdAndDelete(teachingAssistant);
 
-  if (!deletedTeacherAssistant) {
+  if (!deletedTeachingAssistant) {
     return res.status(404).send({
       error: {
         message: "TA not found",
@@ -21,10 +24,9 @@ const handler = async (req: HandlerRequest, res: Response) => {
   }
 
   return res.status(200).send({
-    data: deletedTeacherAssistant,
+    data: deletedTeachingAssistant,
     message: "TA deleted successfully",
   });
 };
 
-const deleteTeacherAssistantHandler = handler;
 export default deleteTeacherAssistantHandler;

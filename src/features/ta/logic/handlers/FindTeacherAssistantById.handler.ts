@@ -3,7 +3,7 @@ import { TeachingAssistantModel } from "@fcai-sis/shared-models";
 
 type HandlerRequest = Request<
   {
-    teacherAssistantId: string;
+    teachingAssistantId: string;
   },
   {},
   {}
@@ -12,11 +12,14 @@ type HandlerRequest = Request<
 /*
  * Find a TA by id.
  * */
-const findTeacherAssistantById = async (req: HandlerRequest, res: Response) => {
-  const teacherAssistantId = req.params.teacherAssistantId;
+const findTeachingAssistantByIdHandler = async (
+  req: HandlerRequest,
+  res: Response
+) => {
+  const teachingAssistantId = req.params.teachingAssistantId;
   // read the TA from the database
-  const teacherAssistant = await TeachingAssistantModel.findById(
-    teacherAssistantId,
+  const teachingAssistant = await TeachingAssistantModel.findById(
+    teachingAssistantId,
     {
       __v: 0,
       user: 0,
@@ -27,7 +30,7 @@ const findTeacherAssistantById = async (req: HandlerRequest, res: Response) => {
     select: "-_id -__v",
   });
 
-  if (!teacherAssistant) {
+  if (!teachingAssistant) {
     return res.status(404).json({
       error: {
         message: "TA not found",
@@ -36,7 +39,7 @@ const findTeacherAssistantById = async (req: HandlerRequest, res: Response) => {
   }
 
   return res.status(200).send({
-    teacherAssistant,
+    teachingAssistant,
   });
 };
-export default findTeacherAssistantById;
+export default findTeachingAssistantByIdHandler;

@@ -8,7 +8,7 @@ import ensureTeacherAssitantIdInParamsMiddleware from "./logic/middlewares/ensur
 import deleteTeacherAssistantHandler from "./logic/handlers/deleteTeacherAssistant.handler";
 import readTeacherAssistantsHandler from "./logic/handlers/readTeacherAssistants.handler";
 import updateTeacherAssistantHandler from "./logic/handlers/updateTeacherAssistant.handler";
-import findTeacherAssistantById from "./logic/handlers/FindTeacherAssistantById.handler";
+import findTeachingAssistantByIdHandler from "./logic/handlers/FindTeacherAssistantById.handler";
 import updateTeacherAssistantValidator from "./logic/middlewares/updateTeacherAssistantValidator.middleware";
 
 const teacherAssistantsRoutes = (router: Router) => {
@@ -30,7 +30,7 @@ const teacherAssistantsRoutes = (router: Router) => {
    **/
 
   router.delete(
-    "/delete/:teacherAssistantId",
+    "/delete/:teachingAssistantId",
 
     checkRole([Role.EMPLOYEE, Role.ADMIN]),
     // Ensure Teacher Assistant id in params.
@@ -54,7 +54,7 @@ const teacherAssistantsRoutes = (router: Router) => {
    * Update Teacher Assistant
    **/
   router.patch(
-    "/update/:teacherAssistantId",
+    "/update/:teachingAssistantId",
     checkRole([Role.EMPLOYEE, Role.ADMIN]),
     // Ensure Teacher Assistant id in params
     ensureTeacherAssitantIdInParamsMiddleware,
@@ -69,12 +69,12 @@ const teacherAssistantsRoutes = (router: Router) => {
    * Find Teacher Assistant by id
    **/
   router.get(
-    "/find/:teacherAssistantId",
+    "/find/:teachingAssistantId",
     checkRole([Role.EMPLOYEE, Role.ADMIN]),
     // Ensure Teacher Assistant id in params
     ensureTeacherAssitantIdInParamsMiddleware,
 
-    asyncHandler(findTeacherAssistantById)
+    asyncHandler(findTeachingAssistantByIdHandler)
   );
 };
 

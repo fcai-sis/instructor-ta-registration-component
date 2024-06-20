@@ -8,6 +8,7 @@ import { isDev } from "./env";
 import logger from "./core/logger";
 import { teacherAssistantsRouter } from "./router";
 import cookieParser from "cookie-parser";
+import mongoose from "mongoose";
 
 // Create Express server
 const app = express();
@@ -61,6 +62,12 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 // TODO: Custom error handler
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   logger.error(err.stack);
+  // check the type of error and return the appropriate response
+  if (err instanceof mongoose.Error.ValidationError) {
+    return res.status(400).json({
+      message: err.message,
+    });
+  }
   res.status(500).json({ message: "Something broke on our end" });
 });
 

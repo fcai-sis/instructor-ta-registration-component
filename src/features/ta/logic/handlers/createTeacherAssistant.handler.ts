@@ -28,6 +28,7 @@ const createTaHandler = async (req: HandlerRequest, res: Response) => {
     department: teachingAssistant.department,
     email: teachingAssistant.email,
     user: user._id,
+    ...(teachingAssistant.officeHours && { officeHours: teachingAssistant.officeHours })
   });
 
   await createdTa.save();

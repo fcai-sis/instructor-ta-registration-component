@@ -10,6 +10,8 @@ import readTeacherAssistantsHandler from "./logic/handlers/readTeacherAssistants
 import updateTeacherAssistantHandler from "./logic/handlers/updateTeacherAssistant.handler";
 import findTeachingAssistantByIdHandler from "./logic/handlers/FindTeacherAssistantById.handler";
 import updateTeacherAssistantValidator from "./logic/middlewares/updateTeacherAssistantValidator.middleware";
+import readTeacherAsssistantsValidator from "./logic/middlewares/readTeacherAssistantsValidator.middleware";
+import paginate from "express-paginate";
 
 const teacherAssistantsRoutes = (router: Router) => {
   /*
@@ -45,8 +47,8 @@ const teacherAssistantsRoutes = (router: Router) => {
     "/read",
     checkRole([Role.EMPLOYEE, Role.ADMIN]),
     // Validate request query params for pagination
-    // paginationQueryParamsMiddleware,
-
+    paginate.middleware(),
+    readTeacherAsssistantsValidator,
     asyncHandler(readTeacherAssistantsHandler)
   );
 

@@ -2,8 +2,7 @@ import { Request, Response } from "express";
 import { InstructorModel, InstructorType } from "@fcai-sis/shared-models";
 
 type HandlerRequest = Request<{}, {}, {}, {
-  fullName?: string,
-  email?: string,
+  search?: string,
   department?: string,
   skip?: number,
   limit?: number
@@ -13,29 +12,35 @@ type HandlerRequest = Request<{}, {}, {}, {
  * Reads all Instructors
  * */
 const handler = async (req: HandlerRequest, res: Response) => {
-  const { fullName, email, department } = req.query;
+  const { search, department, skip, limit } = req.query;
   // read the instructors from the db
+  const searchQuery: any = {
+    ...(department && { department: department }),
+    ...(search && {
+      $or: [
+        { fullName: { $regex: search, $options: "i" } },
+        { email: { $regex: search, $options: "i" } },
+      ]
+    }),
+  };
+
   const instructors = await InstructorModel.find(
-    {
-      ...(fullName && { fullName: fullName }),
-      ...(email && { email: email }),
-      ...(department && { department: department }),
-    },
+    searchQuery,
     {
       __v: 0,
       // _id: 0, // TODO: should probably not reveal the _id but likely needed for frontend
       user: 0,
     },
     {
-      skip: req.skip ?? 0,
-      limit: req.query.limit as unknown as number,
+      skip: skip ?? 0,
+      limit: limit as unknown as number,
     }
   ).populate({
     path: "department",
     select: "-_id -__v",
   });
 
-  const totalInstructors = await InstructorModel.countDocuments({});
+  const totalInstructors = await InstructorModel.countDocuments(searchQuery);
 
   const response = {
     instructors,

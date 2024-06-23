@@ -11,6 +11,7 @@ import updateInstructorHandler from "./handlers/updateInstructor.handler";
 import findInstructorById from "./handlers/FindInstructorById.handler";
 import { Role, checkRole } from "@fcai-sis/shared-middlewares";
 import paginate from "express-paginate";
+import readInstructorsValidator from "./middlewares/readInstructorsValidator.middleware";
 
 const instructorsRoutes = (router: Router) => {
   /*
@@ -48,6 +49,8 @@ const instructorsRoutes = (router: Router) => {
     checkRole([Role.EMPLOYEE, Role.ADMIN]),
     // Validate request query params for pagination
     paginate.middleware(),
+
+    readInstructorsValidator,
 
     asyncHandler(readInstructorsHandler)
   );

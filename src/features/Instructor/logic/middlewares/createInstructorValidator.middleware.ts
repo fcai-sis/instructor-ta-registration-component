@@ -47,6 +47,13 @@ const middlewares = [
     .isString()
     .withMessage("department must be a string"),
 
+  validator
+    .body("instructor.officeHours")
+
+    .optional()
+    .isString()
+    .withMessage("officeHours must be a string"),
+
   validateRequestMiddleware,
 ];
 

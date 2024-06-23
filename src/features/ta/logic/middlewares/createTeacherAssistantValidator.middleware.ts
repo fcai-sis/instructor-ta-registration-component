@@ -45,6 +45,13 @@ const middlewares = [
     .withMessage("department must be a string"),
 
   validateRequestMiddleware,
+
+  validator
+  .body("teachingAssistant.officeHours")
+
+  .optional()
+  .isString()
+  .withMessage("officeHours must be a string"),
 ];
 
 const createTaValidatorMiddleware = middlewares;

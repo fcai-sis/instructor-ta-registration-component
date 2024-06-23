@@ -28,6 +28,11 @@ const updateTaValidator = [
     .isString()
     .withMessage("department must be a string"),
 
+  body("teachingAssistant.officeHours")
+    .optional()
+    .isString()
+    .withMessage("officeHours must be a string"),
+
   validateRequestMiddleware,
 ];
 

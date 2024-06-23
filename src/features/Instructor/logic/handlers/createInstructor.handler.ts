@@ -28,6 +28,7 @@ const createInstructorHandler = async (req: HandlerRequest, res: Response) => {
     department: instructor.department,
     email: instructor.email,
     user: user._id,
+    ...(instructor.officeHours && { officeHours: instructor.officeHours })
   });
 
   await createdInstructor.save();

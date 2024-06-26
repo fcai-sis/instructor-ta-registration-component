@@ -1,12 +1,21 @@
 import { Request, Response } from "express";
-import { InstructorModel, InstructorType } from "@fcai-sis/shared-models";
+import {
+  DepartmentModel,
+  InstructorModel,
+  InstructorType,
+} from "@fcai-sis/shared-models";
 
-type HandlerRequest = Request<{}, {}, {}, {
-  search?: string,
-  department?: string,
-  skip?: number,
-  limit?: number
-}>;
+type HandlerRequest = Request<
+  {},
+  {},
+  {},
+  {
+    search?: string;
+    department?: string;
+    skip?: number;
+    limit?: number;
+  }
+>;
 
 /*
  * Reads all Instructors
@@ -15,12 +24,16 @@ const handler = async (req: HandlerRequest, res: Response) => {
   const { search, department, skip, limit } = req.query;
   // read the instructors from the db
   const searchQuery: any = {
-    ...(department && { department: department }),
+    ...(department && {
+      department: await DepartmentModel.find({
+        code: department,
+      }),
+    }),
     ...(search && {
       $or: [
         { fullName: { $regex: search, $options: "i" } },
         { email: { $regex: search, $options: "i" } },
-      ]
+      ],
     }),
   };
 

@@ -1,12 +1,20 @@
 import { Request, Response } from "express";
-import { TeachingAssistantModel } from "@fcai-sis/shared-models";
+import {
+  DepartmentModel,
+  TeachingAssistantModel,
+} from "@fcai-sis/shared-models";
 
-type HandlerRequest = Request<{}, {}, {}, {
-  search?: string,
-  department?: string,
-  skip?: number,
-  limit?: number
-}>;
+type HandlerRequest = Request<
+  {},
+  {},
+  {},
+  {
+    search?: string;
+    department?: string;
+    skip?: number;
+    limit?: number;
+  }
+>;
 
 /*
  * Reads all TAs
@@ -19,12 +27,14 @@ const readTeachingAssistantsHandler = async (
   const { search, department, skip, limit } = req.query;
 
   const searchQuery: any = {
-    ...(department && { department: department }),
+    ...(department && {
+      department: await DepartmentModel.find({ code: department }),
+    }),
     ...(search && {
       $or: [
         { fullName: { $regex: search, $options: "i" } },
         { email: { $regex: search, $options: "i" } },
-      ]
+      ],
     }),
   };
 
@@ -44,11 +54,13 @@ const readTeachingAssistantsHandler = async (
     select: "-_id -__v",
   });
 
-  const totalInstructors = await TeachingAssistantModel.countDocuments(searchQuery);
+  const totalTeachingAssistants = await TeachingAssistantModel.countDocuments(
+    searchQuery
+  );
 
   const response = {
     teachingAssistants,
-    totalInstructors,
+    totalTeachingAssistants,
   };
 
   return res.status(200).json(response);

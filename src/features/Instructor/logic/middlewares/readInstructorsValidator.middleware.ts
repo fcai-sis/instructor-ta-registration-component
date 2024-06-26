@@ -3,7 +3,7 @@ import { query, validationResult } from "express-validator";
 
 const readInstructorsValidator = [
   query('search').optional().isString().withMessage('Search must be a string'),
-  query('department').optional().isMongoId().withMessage('Department must be a valid MongoId'),
+  query('department').optional().isString().withMessage('Department must be a string'),
   
   (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);

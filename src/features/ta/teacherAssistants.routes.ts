@@ -45,7 +45,7 @@ const teacherAssistantsRoutes = (router: Router) => {
    **/
   router.get(
     "/read",
-    checkRole([Role.EMPLOYEE, Role.ADMIN]),
+    checkRole([Role.EMPLOYEE, Role.ADMIN, Role.STUDENT]),
     // Validate request query params for pagination
     paginate.middleware(),
     readTeacherAsssistantsValidator,

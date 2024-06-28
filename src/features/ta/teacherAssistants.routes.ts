@@ -12,6 +12,7 @@ import findTeachingAssistantByIdHandler from "./logic/handlers/FindTeacherAssist
 import updateTeacherAssistantValidator from "./logic/middlewares/updateTeacherAssistantValidator.middleware";
 import readTeacherAsssistantsValidator from "./logic/middlewares/readTeacherAssistantsValidator.middleware";
 import paginate from "express-paginate";
+import findAuthenticatedTaHandler from "./logic/handlers/me.handler";
 
 const teacherAssistantsRoutes = (router: Router) => {
   /*
@@ -50,6 +51,16 @@ const teacherAssistantsRoutes = (router: Router) => {
     paginate.middleware(),
     readTeacherAsssistantsValidator,
     asyncHandler(readTeacherAssistantsHandler)
+  );
+
+  /*
+   * Get authenticated TA
+   **/
+  router.get(
+    "/me",
+    checkRole([Role.TEACHING_ASSISTANT]),
+
+    asyncHandler(findAuthenticatedTaHandler)
   );
 
   /*

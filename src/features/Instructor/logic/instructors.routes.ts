@@ -12,6 +12,7 @@ import findInstructorById from "./handlers/FindInstructorById.handler";
 import { Role, checkRole } from "@fcai-sis/shared-middlewares";
 import paginate from "express-paginate";
 import readInstructorsValidator from "./middlewares/readInstructorsValidator.middleware";
+import findAuthenticatedInstructorHandler from "./handlers/me.handler";
 
 const instructorsRoutes = (router: Router) => {
   /*
@@ -46,13 +47,24 @@ const instructorsRoutes = (router: Router) => {
   router.get(
     "/read",
 
-    checkRole([Role.EMPLOYEE, Role.ADMIN, Role.STUDENT]),
+    checkRole([Role.STUDENT, Role.EMPLOYEE, Role.ADMIN]),
     // Validate request query params for pagination
     paginate.middleware(),
 
     readInstructorsValidator,
 
     asyncHandler(readInstructorsHandler)
+  );
+
+  /*
+   * Get authenticated instructor
+   **/
+  router.get(
+    "/me",
+
+    checkRole([Role.INSTRUCTOR]),
+
+    asyncHandler(findAuthenticatedInstructorHandler)
   );
 
   /*

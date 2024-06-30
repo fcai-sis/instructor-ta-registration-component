@@ -1,8 +1,5 @@
 import * as validator from "express-validator";
-import { NextFunction, Request, Response } from "express";
-
-import logger from "../../../../core/logger";
-import { DepartmentModel, InstructorModel } from "@fcai-sis/shared-models";
+import { InstructorModel } from "@fcai-sis/shared-models";
 import { validateRequestMiddleware } from "@fcai-sis/shared-middlewares";
 
 /**
@@ -53,6 +50,15 @@ const middlewares = [
     .optional()
     .isString()
     .withMessage("officeHours must be a string"),
+
+  validator
+    .body("password")
+
+    .exists()
+    .withMessage("password is required")
+
+    .isString()
+    .withMessage("password must be a string"),
 
   validateRequestMiddleware,
 ];

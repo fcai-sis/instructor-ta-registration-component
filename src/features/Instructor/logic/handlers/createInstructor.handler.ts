@@ -20,7 +20,7 @@ type HandlerRequest = Request<
  * */
 const createInstructorHandler = async (req: HandlerRequest, res: Response) => {
   const { instructor, password } = req.body;
-  const hashedPassword = bcrypt.hashSync(password, 10);
+  const hashedPassword = await bcrypt.hash(password, 10);
 
   const user = await UserModel.create({ password: hashedPassword });
   const createdInstructor = await InstructorModel.create({
@@ -28,7 +28,7 @@ const createInstructorHandler = async (req: HandlerRequest, res: Response) => {
     department: instructor.department,
     email: instructor.email,
     user: user._id,
-    ...(instructor.officeHours && { officeHours: instructor.officeHours })
+    ...(instructor.officeHours && { officeHours: instructor.officeHours }),
   });
 
   await createdInstructor.save();

@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import {
   InstructorModel,
   InstructorType,
+  RoleEnum,
   UserModel,
 } from "@fcai-sis/shared-models";
 
@@ -22,7 +23,10 @@ const createInstructorHandler = async (req: HandlerRequest, res: Response) => {
   const { instructor, password } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  const user = await UserModel.create({ password: hashedPassword });
+  const user = await UserModel.create({
+    password: hashedPassword,
+    role: RoleEnum[3],
+  });
   const createdInstructor = await InstructorModel.create({
     fullName: instructor.fullName,
     department: instructor.department,

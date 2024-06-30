@@ -4,6 +4,7 @@ import {
   TeachingAssistantType,
   TeachingAssistantModel,
   UserModel,
+  RoleEnum,
 } from "@fcai-sis/shared-models";
 
 type HandlerRequest = Request<
@@ -22,13 +23,18 @@ const createTaHandler = async (req: HandlerRequest, res: Response) => {
   const { teachingAssistant, password } = req.body;
   const hashedPassword = bcrypt.hashSync(password, 10);
 
-  const user = await UserModel.create({ password: hashedPassword });
+  const user = await UserModel.create({
+    password: hashedPassword,
+    role: RoleEnum[4],
+  });
   const createdTa = await TeachingAssistantModel.create({
     fullName: teachingAssistant.fullName,
     department: teachingAssistant.department,
     email: teachingAssistant.email,
     user: user._id,
-    ...(teachingAssistant.officeHours && { officeHours: teachingAssistant.officeHours })
+    ...(teachingAssistant.officeHours && {
+      officeHours: teachingAssistant.officeHours,
+    }),
   });
 
   await createdTa.save();

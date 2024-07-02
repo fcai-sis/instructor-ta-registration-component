@@ -37,9 +37,11 @@ const updateTeachingAssistantHandler = async (
 
   if (!updatedTa) {
     return res.status(404).json({
-      error: {
-        message: "Teaching Assistant not found",
-      },
+      errors: [
+        {
+          message: "Teaching Assistant not found",
+        },
+      ],
     });
   }
 

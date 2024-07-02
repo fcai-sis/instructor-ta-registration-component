@@ -24,16 +24,18 @@ const updateInstructorHandler = async (
       ...(instructor.fullName && { fullName: instructor.fullName }),
       ...(instructor.email && { email: instructor.email }),
       ...(instructor.department && { department: instructor.department }),
-      ...(instructor.officeHours && { officeHours: instructor.officeHours })
+      ...(instructor.officeHours && { officeHours: instructor.officeHours }),
     },
     { new: true, runValidators: true }
   );
 
   if (!updatedInstructor) {
     return res.status(404).json({
-      error: {
-        message: "Instructor not found",
-      },
+      errors: [
+        {
+          message: "Instructor not found",
+        },
+      ],
     });
   }
 

@@ -13,9 +13,11 @@ const deleteInstructorHandler = async (req: HandlerRequest, res: Response) => {
 
   if (!deletedInstructor) {
     return res.status(404).send({
-      error: {
-        message: "Instructor not found",
-      },
+      errors: [
+        {
+          message: "Instructor not found",
+        },
+      ],
     });
   }
 

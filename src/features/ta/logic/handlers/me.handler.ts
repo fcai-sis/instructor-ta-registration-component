@@ -13,7 +13,10 @@ type HandlerRequest = Request<
 /*
  * Find authenticated TA
  * */
-const findAuthenticatedTaHandler = async (req: HandlerRequest, res: Response) => {
+const findAuthenticatedTaHandler = async (
+  req: HandlerRequest,
+  res: Response
+) => {
   const { user } = req.body;
   // read the instructor from the db
   const teachingAssistant = await TeachingAssistantModel.findOne(
@@ -32,9 +35,11 @@ const findAuthenticatedTaHandler = async (req: HandlerRequest, res: Response) =>
 
   if (!teachingAssistant) {
     return res.status(404).json({
-      error: {
-        message: "TA not found",
-      },
+      errors: [
+        {
+          message: "TA not found",
+        },
+      ],
     });
   }
 

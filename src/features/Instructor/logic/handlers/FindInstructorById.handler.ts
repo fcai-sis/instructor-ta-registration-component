@@ -26,9 +26,11 @@ const findInstructorById = async (req: HandlerRequest, res: Response) => {
 
   if (!instructor) {
     return res.status(404).json({
-      error: {
-        message: "Instructor not found",
-      },
+      errors: [
+        {
+          message: "Instructor not found",
+        },
+      ],
     });
   }
 

@@ -32,9 +32,11 @@ const findTeachingAssistantByIdHandler = async (
 
   if (!teachingAssistant) {
     return res.status(404).json({
-      error: {
-        message: "TA not found",
-      },
+      errors: [
+        {
+          message: "TA not found",
+        },
+      ],
     });
   }
 

@@ -17,9 +17,11 @@ const deleteTeacherAssistantHandler = async (
 
   if (!deletedTeachingAssistant) {
     return res.status(404).send({
-      error: {
-        message: "TA not found",
-      },
+      errors: [
+        {
+          message: "TA not found",
+        },
+      ],
     });
   }
 

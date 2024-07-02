@@ -27,13 +27,12 @@ const updateInstructorValidator = [
     .optional()
     .isString()
     .withMessage("department must be a string"),
-
-  validateRequestMiddleware,
-
   body("instructor.officeHours")
     .optional()
     .isString()
     .withMessage("officeHours must be a string"),
+
+  validateRequestMiddleware,
 ];
 
 export default updateInstructorValidator;

@@ -22,7 +22,7 @@ const instructorsRoutes = (router: Router) => {
     "/create",
 
     // Validate request body
-    // checkRole([Role.EMPLOYEE, Role.ADMIN]),
+    checkRole([Role.EMPLOYEE, Role.ADMIN]),
     createInstructorValidatorMiddleware,
 
     asyncHandler(createInstructorHandler)
@@ -47,7 +47,7 @@ const instructorsRoutes = (router: Router) => {
   router.get(
     "/read",
 
-    // checkRole([Role.STUDENT, Role.EMPLOYEE, Role.ADMIN]),
+    checkRole([Role.STUDENT, Role.EMPLOYEE, Role.ADMIN]),
 
     // Validate request query params for pagination
     paginate.middleware(),

@@ -53,7 +53,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Mount API routes
 app.use("/ta", teacherAssistantsRouter());
-app.use("/instructors", instructorsRouter());
+app.use("/instructor", instructorsRouter());
 
 // TODO: Custom 404 handler
 app.use((req: Request, res: Response, next: NextFunction) => {

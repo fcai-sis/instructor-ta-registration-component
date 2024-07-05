@@ -1,5 +1,8 @@
 import * as validator from "express-validator";
-import { InstructorModel } from "@fcai-sis/shared-models";
+import {
+  InstructorModel,
+  TeachingAssistantModel,
+} from "@fcai-sis/shared-models";
 import { validateRequestMiddleware } from "@fcai-sis/shared-middlewares";
 
 /**
@@ -26,10 +29,13 @@ const middlewares = [
 
     .custom(async (value) => {
       // Check if the email already exists in the database
-      const instructor = await InstructorModel.findOne({ email: value });
+      const [instructor, ta] = await Promise.all([
+        InstructorModel.findOne({ email: value }),
+        TeachingAssistantModel.findOne({ email: value }),
+      ]);
 
-      if (instructor) {
-        throw new Error("Instructor with this email already exists");
+      if (instructor || ta) {
+        throw new Error("Instructor or TA with this email already exists");
       }
 
       return true;

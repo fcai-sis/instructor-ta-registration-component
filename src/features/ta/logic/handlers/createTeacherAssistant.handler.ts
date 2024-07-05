@@ -5,6 +5,7 @@ import {
   TeachingAssistantModel,
   UserModel,
   RoleEnum,
+  DepartmentModel,
 } from "@fcai-sis/shared-models";
 
 type HandlerRequest = Request<
@@ -27,9 +28,20 @@ const createTaHandler = async (req: HandlerRequest, res: Response) => {
     password: hashedPassword,
     role: RoleEnum[4],
   });
+
+  const department = await DepartmentModel.findOne({
+    code: teachingAssistant.department,
+  });
+
+  if (!department) {
+    return res.status(400).json({
+      message: "Department not found",
+    });
+  }
+
   const createdTa = await TeachingAssistantModel.create({
     fullName: teachingAssistant.fullName,
-    department: teachingAssistant.department,
+    department: department._id,
     email: teachingAssistant.email,
     user: user._id,
     ...(teachingAssistant.officeHours && {

@@ -35,7 +35,11 @@ const createTaHandler = async (req: HandlerRequest, res: Response) => {
 
   if (!department) {
     return res.status(400).json({
-      message: "Department not found",
+      errors: [
+        {
+          message: "Department not found",
+        },
+      ],
     });
   }
 
@@ -53,7 +57,7 @@ const createTaHandler = async (req: HandlerRequest, res: Response) => {
 
   const response = {
     message: "Teaching Assistant created successfully",
-    instructor: {
+    ta: {
       ...createdTa.toJSON(),
       _id: undefined,
       __v: undefined,

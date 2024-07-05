@@ -16,10 +16,21 @@ import findAuthenticatedInstructorHandler from "./handlers/me.handler";
 
 const instructorsRoutes = (router: Router) => {
   /*
+   * Get authenticated instructor
+   **/
+  router.get(
+    "/me",
+
+    checkRole([Role.INSTRUCTOR]),
+
+    asyncHandler(findAuthenticatedInstructorHandler)
+  );
+
+  /*
    * Create Instructor
    **/
   router.post(
-    "/create",
+    "/",
 
     // Validate request body
     checkRole([Role.EMPLOYEE, Role.ADMIN]),
@@ -33,7 +44,7 @@ const instructorsRoutes = (router: Router) => {
    **/
 
   router.delete(
-    "/delete/:instructorId",
+    "/:instructorId",
 
     checkRole([Role.EMPLOYEE, Role.ADMIN]),
     // Ensure Instructor id in params.
@@ -45,7 +56,7 @@ const instructorsRoutes = (router: Router) => {
    * Read paginated instructors
    **/
   router.get(
-    "/read",
+    "/",
 
     checkRole([
       Role.STUDENT,
@@ -64,21 +75,10 @@ const instructorsRoutes = (router: Router) => {
   );
 
   /*
-   * Get authenticated instructor
-   **/
-  router.get(
-    "/me",
-
-    checkRole([Role.INSTRUCTOR]),
-
-    asyncHandler(findAuthenticatedInstructorHandler)
-  );
-
-  /*
    * Update instructor
    **/
   router.patch(
-    "/update/:instructorId",
+    "/:instructorId",
 
     checkRole([Role.EMPLOYEE, Role.ADMIN]),
     // Ensure instructor id in params
@@ -94,7 +94,7 @@ const instructorsRoutes = (router: Router) => {
    * Find instructor by id
    **/
   router.get(
-    "/find/:instructorId",
+    "/:instructorId",
 
     checkRole([Role.EMPLOYEE, Role.ADMIN]),
     // Ensure instructor id in params

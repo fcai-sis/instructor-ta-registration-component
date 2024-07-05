@@ -16,10 +16,20 @@ import findAuthenticatedTaHandler from "./logic/handlers/me.handler";
 
 const teacherAssistantsRoutes = (router: Router) => {
   /*
+   * Get authenticated TA
+   **/
+  router.get(
+    "/me",
+    checkRole([Role.TEACHING_ASSISTANT]),
+
+    asyncHandler(findAuthenticatedTaHandler)
+  );
+
+  /*
    * Create Teacher Assistant
    **/
   router.post(
-    "/create",
+    "/",
 
     checkRole([Role.EMPLOYEE, Role.ADMIN]),
     // Validate request body
@@ -33,7 +43,7 @@ const teacherAssistantsRoutes = (router: Router) => {
    **/
 
   router.delete(
-    "/delete/:teachingAssistantId",
+    "/:teachingAssistantId",
 
     checkRole([Role.EMPLOYEE, Role.ADMIN]),
     // Ensure Teacher Assistant id in params.
@@ -45,7 +55,7 @@ const teacherAssistantsRoutes = (router: Router) => {
    * Read paginated instructors
    **/
   router.get(
-    "/read",
+    "/",
     checkRole([
       Role.EMPLOYEE,
       Role.ADMIN,
@@ -60,20 +70,10 @@ const teacherAssistantsRoutes = (router: Router) => {
   );
 
   /*
-   * Get authenticated TA
-   **/
-  router.get(
-    "/me",
-    checkRole([Role.TEACHING_ASSISTANT]),
-
-    asyncHandler(findAuthenticatedTaHandler)
-  );
-
-  /*
    * Update Teacher Assistant
    **/
   router.patch(
-    "/update/:teachingAssistantId",
+    "/:teachingAssistantId",
     checkRole([Role.EMPLOYEE, Role.ADMIN]),
     // Ensure Teacher Assistant id in params
     ensureTeacherAssitantIdInParamsMiddleware,
@@ -88,7 +88,7 @@ const teacherAssistantsRoutes = (router: Router) => {
    * Find Teacher Assistant by id
    **/
   router.get(
-    "/find/:teachingAssistantId",
+    "/:teachingAssistantId",
     checkRole([Role.EMPLOYEE, Role.ADMIN]),
     // Ensure Teacher Assistant id in params
     ensureTeacherAssitantIdInParamsMiddleware,

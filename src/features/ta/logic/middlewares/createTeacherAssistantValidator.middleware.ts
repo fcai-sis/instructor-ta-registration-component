@@ -50,6 +50,14 @@ const middlewares = [
     .optional()
     .isString()
     .withMessage("officeHours must be a string"),
+
+  validator
+    .body("password")
+    .exists()
+    .withMessage("password is required")
+    .isString()
+    .withMessage("password must be a string"),
+
   validateRequestMiddleware,
 ];
 

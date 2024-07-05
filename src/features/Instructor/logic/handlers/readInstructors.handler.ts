@@ -21,7 +21,7 @@ type HandlerRequest = Request<
  * Reads all Instructors
  * */
 const handler = async (req: HandlerRequest, res: Response) => {
-  const { search, department, skip, limit } = req.query;
+  const { search, department, limit } = req.query;
   // read the instructors from the db
   const searchQuery: any = {
     ...(department && {
@@ -45,7 +45,7 @@ const handler = async (req: HandlerRequest, res: Response) => {
       user: 0,
     },
     {
-      skip: skip ?? 0,
+      skip: req.skip ?? 0,
       limit: limit as unknown as number,
     }
   ).populate({

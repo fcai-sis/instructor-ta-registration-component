@@ -12,6 +12,7 @@ type HandlerRequest = Request<
   {
     search?: string;
     department?: string;
+    title?: string;
     skip?: number;
     limit?: number;
   }
@@ -21,13 +22,16 @@ type HandlerRequest = Request<
  * Reads all Instructors
  * */
 const handler = async (req: HandlerRequest, res: Response) => {
-  const { search, department, limit } = req.query;
+  const { search, department, title, limit } = req.query;
   // read the instructors from the db
   const searchQuery: any = {
     ...(department && {
       department: await DepartmentModel.find({
         code: department,
       }),
+    }),
+    ...(title && {
+      title,
     }),
     ...(search && {
       $or: [

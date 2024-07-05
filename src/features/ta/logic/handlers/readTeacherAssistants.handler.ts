@@ -11,6 +11,7 @@ type HandlerRequest = Request<
   {
     search?: string;
     department?: string;
+    title?: string;
     limit?: number;
   }
 >;
@@ -23,11 +24,14 @@ const readTeachingAssistantsHandler = async (
   res: Response
 ) => {
   // read the instructors from the db
-  const { search, department, limit } = req.query;
+  const { search, department, title, limit } = req.query;
 
   const searchQuery: any = {
     ...(department && {
       department: await DepartmentModel.find({ code: department }),
+    }),
+    ...(title && {
+      title,
     }),
     ...(search && {
       $or: [

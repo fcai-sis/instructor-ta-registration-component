@@ -32,7 +32,7 @@ const createInstructorHandler = async (req: HandlerRequest, res: Response) => {
     department: instructor.department,
     email: instructor.email,
     user: user._id,
-    title: instructor.title,
+    // title: instructor.title,
     ...(instructor.officeHours && { officeHours: instructor.officeHours }),
   });
 

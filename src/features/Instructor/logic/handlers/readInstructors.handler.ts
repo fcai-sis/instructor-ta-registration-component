@@ -13,7 +13,6 @@ type HandlerRequest = Request<
     search?: string;
     department?: string;
     title?: string;
-    skip?: number;
     limit?: number;
   }
 >;
